@@ -14,7 +14,7 @@ class TestGrammarAndFeature(unittest.TestCase):
     def setUp(self):
         self.feature_table = FeatureTable.load(get_feature_table_fixture("feature_table.json"))
         self.corpus = Corpus.load(get_corpus_fixture("corpus.txt"))
-        self.correct_constraint_set_filename = get_constraint_set_fixture("constraint_set.json")
+        self.correct_constraint_set_filename = get_constraint_set_fixture("constraints.json")
         self.full_feature_table_for_grammar = FeatureTable.load(get_feature_table_fixture("full_feature_table.json"))
 
     def test_validity_of_segments(self):

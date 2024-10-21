@@ -1,15 +1,21 @@
 import json
+import os
 from io import StringIO
-from typing import Any, Literal, Optional, Self
+from typing import Any, Self
 
-from pydantic import BaseModel, field_validator, create_model, model_validator, ConfigDict, NonNegativeInt
-from pydantic_core import from_json
+from pydantic import BaseModel, field_validator, model_validator, ConfigDict, NonNegativeInt
 
 from source.errors import OtmlConfigurationError
 from source.singelton import Singleton
 
-INF = Literal[float("inf")]
+CONFIG_FILE_NAME = "config.json"
 
+DATA_FILES = {
+    "config_file": "config.json",
+    "constraints_file": "constraints.json",
+    "features_file": "features.json",
+    "corpus_file": "corpus.txt",
+}
 
 class Model(BaseModel):
     model_config = ConfigDict(
@@ -74,12 +80,13 @@ class ConstraintInsertionWeights(Weights):
 
 
 class OtmlConfiguration(Model, Singleton):
-    source_file: str
     simulation_name: str
 
-    constraint_set_file_name: str
-    feature_table_file_name: str
-    corpus_file_name: str
+    config_folder: str
+    config_file: str
+    constraints_file: str
+    features_file: str
+    corpus_file: str
 
     log_file_name: str
     log_lexicon_words: bool
@@ -129,23 +136,29 @@ class OtmlConfiguration(Model, Singleton):
                 x, y = raw.split("**")
                 return float(x) ** int(y)
         except ValueError:
-            raise OtmlConfigurationError(f"Invalid integer value", {"value": raw})
+            raise OtmlConfigurationError(f"Invalid config.json value", {"value": raw})
         return raw
 
     @classmethod
-    def from_json(cls, file_path: str) -> Self:
-        with open(file_path, "r") as f:
-            raw = json.load(f)
+    def load(cls, config_folder_path: str) -> None:
+        absolute_folder_path = os.path.join(os.getcwd(), config_folder_path)
 
-        raw["source_file"] = file_path
-        obj = cls.model_validate(raw)
-        return obj
+        config_dict = {"config_folder": absolute_folder_path}
+        for field_name, file_name in DATA_FILES.items():
+            config_dict[field_name] = os.path.join(absolute_folder_path, file_name)
+
+        with open(config_dict["config_file"], "r") as f:
+            config_dict.update(json.load(f))
+
+        config = cls.model_validate(config_dict)
+        global _settings
+        _settings = config
 
     def reset(self) -> Self:
         """
         returns a copy of the configuration's original state
         """
-        return from_json(self.source_file)
+        return self.load(self.config_folder)
 
     def update(self, **updates) -> Self:
         """
@@ -188,3 +201,19 @@ class OtmlConfiguration(Model, Singleton):
                 "Either neither or both of `lexicon_mutation_weights.change_segment` and `allow_candidates_with_changed_segments` must be positive",
             )
         return self
+
+
+# from here on: code to let us easily access configs in the project by doing
+# >>> from source.otml_configuration import settings
+# >>> settings.[any config field]
+# TODO: see if we can make this less ugly, or move it to a separate file
+
+_settings: OtmlConfiguration | None = None
+
+class LazySettings:
+    def __getattr__(self, item):
+        if _settings is None:
+            raise OtmlConfigurationError("Settings have not been initialized. Call 'OtmlConfiguration.load' first.")
+        return getattr(_settings, item)
+
+settings: OtmlConfiguration = LazySettings()

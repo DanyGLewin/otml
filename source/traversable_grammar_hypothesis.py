@@ -6,14 +6,10 @@ import logging
 from math import ceil, log
 import pickle
 
-from source.otml_configuration import OtmlConfiguration
+from source.otml_configuration import settings
 from unicode_mixin import UnicodeMixin
-from source.errors import OtmlConfigurationError
 
 logger = logging.getLogger(__name__)
-configurations: OtmlConfiguration = OtmlConfiguration.get_instance()
-if configurations is None:
-    raise OtmlConfigurationError("OtmlConfigurationManager was not initialized")
 
 
 
@@ -31,8 +27,8 @@ class TraversableGrammarHypothesis(UnicodeMixin, object):
     def get_energy(self):
         data_length = self.get_data_length_given_grammar()
         grammar_length = self.grammar.get_encoding_length()
-        data_multiplier = configurations.data_encoding_length_multiplier
-        grammar_multiplier = configurations.grammar_encoding_length_multiplier
+        data_multiplier = settings.data_encoding_length_multiplier
+        grammar_multiplier = settings.grammar_encoding_length_multiplier
         self.grammar_energy = grammar_length * grammar_multiplier
         self.data_energy = data_length * data_multiplier
         self.combined_energy = self.grammar_energy + self.data_energy

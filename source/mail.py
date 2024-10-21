@@ -3,10 +3,7 @@ from six import with_metaclass
 import logging
 import smtplib
 
-from source.otml_configuration import OtmlConfiguration
-
 logger = logging.getLogger(__name__)
-configurations: OtmlConfiguration = OtmlConfiguration.get_instance()
 
 
 class MailManager(Singleton):

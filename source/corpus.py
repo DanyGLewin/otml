@@ -3,14 +3,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import textwrap
 
-from source.otml_configuration import OtmlConfiguration
+from source.otml_configuration import settings
 from unicode_mixin import UnicodeMixin
 from grammar.lexicon import Word, get_words_from_file
-from source.errors import OtmlConfigurationError
-
-configurations: OtmlConfiguration = OtmlConfiguration.get_instance()
-if configurations is None:
-    raise OtmlConfigurationError("OtmlConfigurationManager was not initialized")
 
 class Corpus(UnicodeMixin, object):
 
@@ -19,9 +14,8 @@ class Corpus(UnicodeMixin, object):
 
     @classmethod
     def load(cls, corpus_file_name):
-
         words = get_words_from_file(corpus_file_name)
-        duplication_factor = configurations.corpus_duplication_factor
+        duplication_factor = settings.corpus_duplication_factor
         n = len(words)
         duplication_factor_int = int(duplication_factor)
         duplication_factor_fraction = duplication_factor - int(duplication_factor)

@@ -3,11 +3,14 @@
 
 import codecs
 import json
+from dataclasses import dataclass, make_dataclass
 from random import choice
 import logging
 from copy import deepcopy
 import os
 
+from pydantic import BaseModel, model_validator
+from pydantic.v1 import create_model
 from six import string_types, integer_types, StringIO, iterkeys
 
 from source.otml_configuration import OtmlConfiguration
@@ -16,40 +19,72 @@ from source.errors import OtmlConfigurationError
 from source.errors import FeatureParseError
 
 logger = logging.getLogger(__name__)
-configurations: OtmlConfiguration = OtmlConfiguration.get_instance()
-if configurations is None:
-    raise OtmlConfigurationError("OtmlConfigurationManager was not initialized")
+
+
+class Feature(BaseModel):
+    label: str
+    values: list[str]
+
+    def __repr__(self):
+        return f"{self.label}: {self.values}"
+
+
+class FeatureList(BaseModel):
+    features: list[Feature]
+
+    @property
+    def labels(self):
+        return {f.label for f in self.features}
+
+    def __getitem__(self, key: int | str):
+        if type(key) == str:
+            if key in self.labels:
+                return [f.values for f in self.features if f.label == key][0]
+            else:
+                raise KeyError(key)
+        if type(key) == int:
+            return self.features[key]
+
+    def __len__(self):
+        return len(self.features)
+
+    def __iter__(self):
+        return iter(self.features)
+
+    def __contains__(self, key: str | Feature):
+        if type(key) == str:
+            return key in self.labels
+        return key in self.features
+
+    @model_validator(mode="after")
+    def _validate_distinct(self):
+        for label in self.labels:
+            features = [f for f in self.features if f.label == label]
+            if len(features) > 1:
+                raise FeatureParseError("Feature was defined more than once", {"label": label, "definitions": features})
+        return self
 
 
 class FeatureTable(UnicodeMixin, object):
     def __init__(self, feature_table_dict_from_json):
         self.feature_table_dict = dict()
-        self.feature_types_dict = dict()
+        self.features_list = FeatureList.model_validate(dict(features=feature_table_dict_from_json["feature"]))
         self.segments_list = list()
-        feature_type_list = [dict(**feature) for feature in feature_table_dict_from_json["feature"]]
-        feature_types_label_in_order = [feature["label"] for feature in feature_table_dict_from_json["feature"]]
-
-        for feature_type_label in feature_types_label_in_order:
-            if feature_types_label_in_order.count(feature_type_label) > 1:
-                raise FeatureParseError('feature "{}" appears more then one time'.format(feature_type_label))
 
         self.feature_order_dict = dict()
-        for i, feature in enumerate(feature_types_label_in_order):
+        for i, feature in enumerate(self.features_list):
             self.feature_order_dict[i] = feature
-
-        for feature_type in feature_type_list:
-            self.feature_types_dict[feature_type["label"]] = feature_type["values"]
 
         for symbol in feature_table_dict_from_json["feature_table"].keys():
             feature_values = feature_table_dict_from_json["feature_table"][symbol]
-            if len(feature_values) != len(self.feature_types_dict):
+            if len(feature_values) != len(self.features_list):
                 raise FeatureParseError("Mismatch in number of features for segment {0}".format(symbol))
             symbol_feature_dict = dict()
             for i, feature_value in enumerate(feature_values):
-                feature_label = feature_types_label_in_order[i]
-                if not feature_value in self.feature_types_dict[feature_label]:
+                feature = self.features_list[i]
+                if not feature_value in feature.values:
                     raise FeatureParseError("Illegal feature was found for segment {0}".format(symbol))
-                symbol_feature_dict[feature_label] = feature_value
+                symbol_feature_dict[feature.label] = feature_value
             self.feature_table_dict[symbol] = symbol_feature_dict
 
         for symbol in self.get_alphabet():
@@ -89,13 +124,13 @@ class FeatureTable(UnicodeMixin, object):
         return feature_table_dict
 
     def get_number_of_features(self):
-        return len(self.feature_types_dict)
+        return len(self.features_list)
 
     def get_features(self):
-        return list(iterkeys(self.feature_types_dict))
+        return self.features_list.labels
 
     def get_random_value(self, feature):
-        return choice(self.feature_types_dict[feature])
+        return choice(self.features_list[feature])
 
     def get_alphabet(self):
         return list(iterkeys(self.feature_table_dict))
@@ -110,14 +145,20 @@ class FeatureTable(UnicodeMixin, object):
         return [self[char][self.feature_order_dict[i]] for i in range(self.get_number_of_features())]
 
     def is_valid_feature(self, feature_label):
-        return feature_label in self.feature_types_dict
+        return feature_label in self.features_list
 
     def is_valid_symbol(self, symbol):
         return symbol in self.feature_table_dict
 
     def __unicode__(self):
         values_str_io = StringIO()
-        print("Feature Table with {0} features and {1} segments:".format(self.get_number_of_features(), len(self.get_alphabet())), end="\n", file=values_str_io)
+        print(
+            "Feature Table with {0} features and {1} segments:".format(
+                self.get_number_of_features(), len(self.get_alphabet())
+            ),
+            end="\n",
+            file=values_str_io,
+        )
 
         print("{:20s}".format("Segment/Feature"), end="", file=values_str_io)
         for i in list(range(len(self.feature_order_dict))):

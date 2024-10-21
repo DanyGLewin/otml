@@ -1,130 +1,67 @@
 """
 This is the entry point of the otml project
 The working directory for activating this file should be "otml"
-
 """
-#Python2 and Python 3 compatibility:
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import platform
-from os import getcwd
-from os.path import dirname, join, basename, exists
-from optparse import OptionParser
-from source.errors import OtmlConfigurationError, OtmlError
+import os
+
+import click
+
 from base64 import urlsafe_b64encode
 from uuid import uuid4
 
-from source.otml_configuration import OtmlConfiguration
+from source.otml_configuration import OtmlConfiguration, settings
+
+from grammar.lexicon import Lexicon
+from grammar.feature_table import FeatureTable
+from grammar.constraint_set import ConstraintSet
+from grammar.grammar import Grammar
+from traversable_grammar_hypothesis import TraversableGrammarHypothesis
+from corpus import Corpus
+from simulated_annealing import SimulatedAnnealing
 
 
-#--configuration simulations/bb/bb_configuration.json
+# --configuration simulations/bb/bb_configuration.json
 
 
-def main():
-    parser = OptionParser() #test
-    parser.add_option("--configuration", dest="configuration_file_relative_path")
-    parser.add_option("--sub-configuration", dest="sub_configuration_file_relative_path")
-    parser.add_option("--from_middle", dest="middle_file_relative_path")
-    (options, args) = parser.parse_args()
+@click.command()
+@click.option(
+    "-c", "--configuration", "config_folder_path", required=True, help="Relative path to the configuration folder"
+)
+def main(config_folder_path):
+    # load configurations
+    OtmlConfiguration.load(config_folder_path)
 
-    if options.configuration_file_relative_path and options.middle_file_relative_path:
-        raise OtmlError("can not handle both: --configuration and --from_middle")
-    elif not (options.configuration_file_relative_path or options.middle_file_relative_path):
-        raise OtmlError("must have one: --configuration or --from_middle")
-
-    current_dir = getcwd()
-    current_working_directory_name = basename(current_dir)
-    #validate current directory
-    if current_working_directory_name != "otml":
-        raise OtmlError("this file should be called from the otml directory")
-
-
-    if options.middle_file_relative_path:
-        raise NotImplementedError
-
-    if options.configuration_file_relative_path:
-        configuration_file_path = join(current_dir, options.configuration_file_relative_path)
-        configuration_files_dir_path = dirname(configuration_file_path)
-        configuration_files_dir_name = basename(configuration_files_dir_path)
-
-        #load configurations
-        configurations: OtmlConfiguration = OtmlConfiguration.get_instance()
-
-        if options.sub_configuration_file_relative_path:
-            pass
-
-        #validate simulation name
-        if configuration_files_dir_name != configurations.simulation_name:
-            raise OtmlConfigurationError("SIMULATION_NAME should match configuration file containing directory")
-
-        constraint_set_file_name = configurations.constraint_set_file_name
-        feature_table_file_name = configurations.feature_table_file_name
-        corpus_file_name = configurations.corpus_file_name
-
-        #check existence of data files
-        constraint_set_file_path = join(configuration_files_dir_path, constraint_set_file_name)
-        if not exists(constraint_set_file_path):
-            raise OtmlConfigurationError("CONSTRAINT_SET_FILE_NAME does not exist where it should")
-
-        feature_table_file_path = join(configuration_files_dir_path, feature_table_file_name)
-        if not exists(feature_table_file_path):
-            raise OtmlConfigurationError("FEATURE_TABLE_FILE_NAME does not exist where it should")
-
-        corpus_file_path = join(configuration_files_dir_path, corpus_file_name)
-        if not exists(corpus_file_path):
-            raise OtmlConfigurationError("CORPUS_FILE_NAME does not exist where it should")
-
-        load_modules_and_run(feature_table_file_path, corpus_file_path, constraint_set_file_path,
-                             configuration_files_dir_path)
-
-
-def load_modules_and_run(feature_table_file_path, corpus_file_path, constraint_set_file_path,
-                         configuration_files_dir_path):
-    #TODO finish the loading from file
-    #file, path, desc = imp.find_module("bb", [configuration_files_dir_path])
-    #
-    #module = imp.load_module("bb", file, path, desc)
-    #print(type(module))
-    #print(dir(module))
-    #module.print_()
-
-    #importing in here because it is after OtmlConfigurationManager initialization
-    from grammar.lexicon import Lexicon
-    from grammar.feature_table import FeatureTable
-    from grammar.constraint_set import ConstraintSet
-    from grammar.grammar import Grammar
-    from traversable_grammar_hypothesis import TraversableGrammarHypothesis
-    from corpus import Corpus
-    from simulated_annealing import SimulatedAnnealing
-
-    feature_table = FeatureTable.load(feature_table_file_path)
-    corpus = Corpus.load(corpus_file_path)
-    constraint_set = ConstraintSet.load(constraint_set_file_path, feature_table)
+    # load grammar and data
+    feature_table = FeatureTable.load(settings.features_file)
+    corpus = Corpus.load(settings.corpus_file)
+    constraint_set = ConstraintSet.load(settings.constraints_file, feature_table)
     lexicon = Lexicon(corpus.get_words(), feature_table)
     grammar = Grammar(feature_table, constraint_set, lexicon)
     data = corpus.get_words()
+
+    # prepare data for optimization
     traversable_hypothesis = TraversableGrammarHypothesis(grammar, data)
     simulated_annealing = SimulatedAnnealing(traversable_hypothesis)
+
+    # run simulated annealing
+    print("Starting optimization")
     simulated_annealing.run()
-
-
+    print("Done")
 
 
 def get_log_name():
     short_random_identifier = urlsafe_b64encode(uuid4().bytes)[:4].decode("utf-8")  # length 4 of base64
-                                                                                    # is more than 16M possibilities
+    # is more than 16M possibilities
     log_name = "_".join()
-
-
 
 
 def create_simulation_directory(simulation_name, sub_name):
     computer_name = platform.node()
-    #logging
-
-
+    # logging
 
 
 if __name__ == "__main__":
     main()
-    #get_log_name()
+    # get_log_name()

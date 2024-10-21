@@ -10,12 +10,9 @@ from unicode_mixin import UnicodeMixin
 from source.errors import GrammarParseError
 from source.errors import OtmlConfigurationError
 
-from source.otml_configuration import OtmlConfiguration
+from source.otml_configuration import settings
 
 logger = logging.getLogger(__name__)
-configurations: OtmlConfiguration = OtmlConfiguration.get_instance()
-if configurations is None:
-    raise OtmlConfigurationError("OtmlConfigurationManager was not initialized")
 
 class FeatureBundle(UnicodeMixin, object):
     __slots__ = ["feature_dict", "feature_table"]
@@ -37,7 +34,7 @@ class FeatureBundle(UnicodeMixin, object):
         return self.feature_dict
 
     def augment_feature_bundle(self):
-        if len(self.feature_dict) < configurations["MAX_FEATURES_IN_BUNDLE"]:
+        if len(self.feature_dict) < settings["MAX_FEATURES_IN_BUNDLE"]:
             all_feature_labels = self.feature_table.get_features()
             feature_labels_in_feature_bundle = iterkeys(self.feature_dict)
             available_feature_labels = list(set(all_feature_labels) - set(feature_labels_in_feature_bundle))
@@ -49,12 +46,12 @@ class FeatureBundle(UnicodeMixin, object):
 
     @classmethod
     def generate_random(cls, feature_table):
-        if configurations.initial_number_of_features > feature_table.get_number_of_features():
+        if settings.initial_number_of_features > feature_table.get_number_of_features():
             raise OtmlConfigurationError("INITIAL_NUMBER_OF_FEATURES is bigger from number of available features")
 
         feature_dict = dict()
-        available_feature_labels = feature_table.get_features()
-        for i in range(configurations.initial_number_of_features):
+        available_feature_labels = list(feature_table.get_features())
+        for i in range(settings.initial_number_of_features):
             feature_label = choice(available_feature_labels)
             feature_dict[feature_label] = feature_table.get_random_value(feature_label)
             available_feature_labels.remove(feature_label)

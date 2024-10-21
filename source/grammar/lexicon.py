@@ -7,8 +7,7 @@ from math import log, ceil
 import codecs
 from ast import literal_eval
 
-from source.errors import OtmlConfigurationError
-from source.otml_configuration import OtmlConfiguration
+from source.otml_configuration import settings
 from source.unicode_mixin import UnicodeMixin
 
 
@@ -19,9 +18,6 @@ from source.randomization_tools import get_weighted_list
 
 
 logger = logging.getLogger(__name__)
-configurations: OtmlConfiguration = OtmlConfiguration.get_instance()
-if configurations is None:
-    raise OtmlConfigurationError("OtmlConfigurationManager was not initialized")
 
 
 word_transducers = dict()
@@ -164,9 +160,9 @@ class Lexicon(UnicodeMixin, object):
         """
         rtype: boolean - the mutation success
         """
-        mutation_weights = [(self._insert_segment, configurations.lexicon_mutation_weights.insert_segment),
-                            (self._delete_segment, configurations.lexicon_mutation_weights.delete_segment),
-                            (self._change_segment, configurations.lexicon_mutation_weights.change_segment)]
+        mutation_weights = [(self._insert_segment, settings.lexicon_mutation_weights.insert_segment),
+                            (self._delete_segment, settings.lexicon_mutation_weights.delete_segment),
+                            (self._change_segment, settings.lexicon_mutation_weights.change_segment)]
 
         weighted_mutation_function_list = get_weighted_list(mutation_weights)
         return choice(weighted_mutation_function_list)()
@@ -195,7 +191,7 @@ class Lexicon(UnicodeMixin, object):
             return selected_word.delete_segment()
 
     def get_encoding_length(self):
-        if configurations.restriction_on_alphabet:
+        if settings.restriction_on_alphabet:
             alphabet_size = len(self.feature_table.get_alphabet())
             restricted_alphabet_size = len(self.get_distinct_segments())
             number_of_bits = ceil(log(alphabet_size + 1, 2))
@@ -224,7 +220,7 @@ class Lexicon(UnicodeMixin, object):
         return sum([len(word) for word in self.words])
 
     def __unicode__(self):
-        if configurations.log_lexicon_words:
+        if settings.log_lexicon_words:
             return "Lexicon, number of words: {0}, number of segments: {1}, {2}".format(len(self.words),
                                                                      self._get_number_of_segments(),
                                                                      [str(w.word_string) for w in self.words])

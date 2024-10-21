@@ -16,7 +16,7 @@ from tests.persistence_tools import get_constraint_set_fixture, get_feature_tabl
 class TestConstraint(StochasticTestCase):
 
     def setUp(self):
-        self.correct_constraint_set_filename = get_constraint_set_fixture("constraint_set.json")
+        self.correct_constraint_set_filename = get_constraint_set_fixture("constraints.json")
         self.feature_table = FeatureTable.load(get_feature_table_fixture("full_feature_table.json"))
         self.constraint_set = ConstraintSet.load(self.correct_constraint_set_filename, self.feature_table)
 

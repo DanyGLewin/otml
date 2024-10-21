@@ -21,7 +21,7 @@ class TestGrammar(StochasticTestCase):
 
     def setUp(self):
         self.feature_table = FeatureTable.load(get_feature_table_fixture("full_feature_table.json"))
-        self.constraint_set = ConstraintSet.load(get_constraint_set_fixture("constraint_set.json"),
+        self.constraint_set = ConstraintSet.load(get_constraint_set_fixture("constraints.json"),
                                                   self.feature_table)
         self.constraint_set_with_faith = ConstraintSet.load(
             get_constraint_set_fixture("faith_constraint_set.json"),

@@ -15,7 +15,7 @@ class TestConstraintSet(StochasticTestCase):
     def setUp(self):
         self.illegal_grammar_file_names = [get_constraint_set_fixture(""
                                              "illegal_constraint_set{}.json".format(i+1)) for i in range(5)]
-        self.correct_constraint_set_filename = get_constraint_set_fixture("constraint_set.json")
+        self.correct_constraint_set_filename = get_constraint_set_fixture("constraints.json")
         self.feature_table = FeatureTable.load(get_feature_table_fixture("full_feature_table.json"))
         self.constraint_set = ConstraintSet.load(self.correct_constraint_set_filename, self.feature_table)
 
@@ -29,7 +29,7 @@ class TestConstraintSet(StochasticTestCase):
         #self.assertEqual(str(constraint_set), "Constraint Set: " + constraint_set_string)
 
         feature_table = FeatureTable.load(get_feature_table_fixture("full_feature_table.json"))
-        constraint_set = ConstraintSet.load(get_constraint_set_fixture("constraint_set.json"), feature_table)
+        constraint_set = ConstraintSet.load(get_constraint_set_fixture("constraints.json"), feature_table)
         constraint_set_string = str(constraint_set).replace("Constraint Set: ", "")
         constraint_set = ConstraintSet.load_from_printed_string_representation(constraint_set_string, feature_table)
 
