@@ -145,7 +145,7 @@ class OtmlConfiguration(Model, Singleton):
         """
         returns a copy of the configuration's original state
         """
-        return from_json(self.source_file)
+        return self.from_json(self.source_file)
 
     def update(self, **updates) -> Self:
         """
