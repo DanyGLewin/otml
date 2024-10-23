@@ -9,7 +9,7 @@ from copy import deepcopy
 from six import PY3, StringIO, itervalues
 
 import logging
-from grammar.feature_table import NULL_SEGMENT, JOKER_SEGMENT, Segment
+from grammar.feature_table import NULL_SEGMENT, JOKER_SEGMENT, Segment_
 from source.errors import CostVectorOperationError
 from unicode_mixin import UnicodeMixin
 
@@ -436,8 +436,8 @@ class Arc(UnicodeMixin, object):
 
     @classmethod
     def intersect(cls, arc1, arc2):
-        unified_input = Segment.intersect(arc1.input, arc2.input)
-        unified_output = Segment.intersect(arc1.output, arc2.output)
+        unified_input = Segment_.intersect(arc1.input, arc2.input)
+        unified_output = Segment_.intersect(arc1.output, arc2.output)
 
         if unified_input is not None and unified_output is not None:
             new_origin_state = arc1.origin_state & arc2.origin_state

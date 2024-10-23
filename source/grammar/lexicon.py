@@ -10,7 +10,7 @@ from ast import literal_eval
 from source.otml_configuration import settings
 from source.unicode_mixin import UnicodeMixin
 
-from source.grammar.feature_table import Segment
+from source.grammar.feature_table import Segment_
 from source.transducer import CostVector, Arc, State, Transducer, NULL_SEGMENT, JOKER_SEGMENT
 from source.randomization_tools import get_weighted_list
 
@@ -29,7 +29,7 @@ class Word(UnicodeMixin, object):
         """
         self.word_string = word_string
         self.feature_table = feature_table
-        self.segments = [Segment(char, self.feature_table) for char in self.word_string]
+        self.segments = [Segment_(char, self.feature_table) for char in self.word_string]
 
     def change_segment(self):
         """changing the word_string and therefore the segments composing it
@@ -88,7 +88,7 @@ class Word(UnicodeMixin, object):
 
     def _set_word_string(self, new_word_string):
         self.word_string = new_word_string
-        self.segments = [Segment(char, self.feature_table) for char in self.word_string]
+        self.segments = [Segment_(char, self.feature_table) for char in self.word_string]
 
     def get_transducer(self):
         word_key = str(self)
