@@ -1,10 +1,6 @@
-# Python2 and Python 3 compatibility:
-# from __future__ import absolute_import, division, print_function, unicode_literals
-
-import codecs
+import csv
 import json
 import logging
-import os
 from copy import deepcopy
 from random import choice
 
@@ -12,6 +8,8 @@ from pydantic import BaseModel, model_validator
 from six import string_types, integer_types, StringIO, iterkeys
 
 from src.exceptions import FeatureParseError
+from src.grammar.base_segment import BaseSegment
+from src.otml_configuration import settings
 from src.utils.unicode_mixin import UnicodeMixin
 
 logger = logging.getLogger(__name__)
@@ -62,17 +60,17 @@ class FeatureList(BaseModel):
 
 
 class FeatureTable(UnicodeMixin, object):
-    def __init__(self, feature_table_dict_from_json):
+    def __init__(self, segments: list[BaseSegment]):
         self.feature_table_dict = dict()
-        self.features_list = FeatureList.model_validate(dict(features=feature_table_dict_from_json["feature"]))
+        self.features_list = FeatureList.model_validate(dict(features=segments["feature"]))
         self.segments_list = list()
 
         self.feature_order_dict = dict()
         for i, feature in enumerate(self.features_list):
             self.feature_order_dict[i] = feature
 
-        for symbol in feature_table_dict_from_json["feature_table"].keys():
-            feature_values = feature_table_dict_from_json["feature_table"][symbol]
+        for symbol in segments["feature_table"].keys():
+            feature_values = segments["feature_table"][symbol]
             if len(feature_values) != len(self.features_list):
                 raise FeatureParseError("Mismatch in number of features for segment {0}".format(symbol))
             symbol_feature_dict = dict()
@@ -84,7 +82,7 @@ class FeatureTable(UnicodeMixin, object):
             self.feature_table_dict[symbol] = symbol_feature_dict
 
         for symbol in self.get_alphabet():
-            self.segments_list.append(Segment(symbol, self))
+            self.segments_list.append(Segment_(symbol, self))
 
     @classmethod
     def loads(cls, feature_table_str):
@@ -92,32 +90,12 @@ class FeatureTable(UnicodeMixin, object):
         return cls(feature_table_dict)
 
     @classmethod
-    def load(cls, feature_table_fn):
-        file = codecs.open(feature_table_fn, "r")
-        if os.path.splitext(feature_table_fn)[1] == ".json":
-            feature_table_dict = json.load(file)
-        else:
-            feature_table_dict = FeatureTable.get_feature_table_dict_form_csv(file)
-        file.close()
-        return cls(feature_table_dict)
+    def load(cls):
+        with open(settings.features_file, "r") as f:
+            reader = csv.DictReader(f)
+            segments_list = [settings.Segment.model_validate(row) for row in reader]
 
-    @staticmethod
-    def get_feature_table_dict_form_csv(file):
-        feature_table_dict = dict()
-        feature_table_dict["feature"] = list()
-        feature_table_dict["feature_table"] = dict()
-        lines = file.readlines()
-        lines = [x.strip() for x in lines]
-        feature_label_list = lines[0][1:].split(",")  # first line, ignore firt comma (,cons, labial..)
-        feature_table_dict["feature"] = list()
-        for label in feature_label_list:
-            feature_table_dict["feature"].append({"label": label, "values": ["-", "+"]})
-
-        for line in lines[1:]:
-            values_list = line.split(",")
-            feature_table_dict["feature_table"][values_list[0]] = values_list[1:]
-
-        return feature_table_dict
+        return cls(segments_list)
 
     def get_number_of_features(self):
         return len(self.features_list)
@@ -180,7 +158,7 @@ class FeatureTable(UnicodeMixin, object):
             return self.feature_table_dict[segment][feature]
 
 
-class Segment(UnicodeMixin, object):
+class Segment_(UnicodeMixin, object):
     def __init__(self, symbol, feature_table=None):
         self.symbol = symbol  # JOKER and NULL segments need feature_table=None
         if feature_table:
@@ -202,8 +180,8 @@ class Segment(UnicodeMixin, object):
     def intersect(x, y):
         """Intersect two segments, a segment and a set, or two sets.
 
-        :type x: Segment or set
-        :type y: Segment or set
+        :type x: Segment_ or set
+        :type y: Segment_ or set
         """
         if isinstance(x, set):
             x, y = y, x  # if x is a set then maybe y is a segment, switch between them so that
@@ -213,7 +191,7 @@ class Segment(UnicodeMixin, object):
     def __and__(self, other):
         """Based on ```(17) symbol unification```(Riggle, 2004)
 
-        :type other: Segment or set
+        :type other: Segment_ or set
         """
         if self == JOKER_SEGMENT:
             return other
@@ -252,8 +230,8 @@ class Segment(UnicodeMixin, object):
 
 # ----------------------
 # Special segments - required for transducer construction
-NULL_SEGMENT = Segment("-")
-JOKER_SEGMENT = Segment("*")
+NULL_SEGMENT = Segment_("-")
+JOKER_SEGMENT = Segment_("*")
 
 
 # ----------------------

@@ -1,3 +1,4 @@
+import importlib
 import json
 import os
 from io import StringIO
@@ -6,6 +7,7 @@ from typing import Any, Self
 from pydantic import BaseModel, field_validator, model_validator, ConfigDict, NonNegativeInt
 
 from src.exceptions import OtmlConfigurationError
+from src.grammar.base_segment import BaseSegment
 from src.models.singelton import Singleton
 
 CONFIG_FILE_NAME = "config.json"
@@ -13,7 +15,7 @@ CONFIG_FILE_NAME = "config.json"
 DATA_FILES = {
     "config_file": "config.json",
     "constraints_file": "constraints.json",
-    "features_file": "features.json",
+    "features_file": "feature_table.csv",
     "corpus_file": "corpus.txt",
 }
 
@@ -88,6 +90,7 @@ class OtmlConfiguration(Model, Singleton):
     constraints_file: str
     features_file: str
     corpus_file: str
+    Segment: type[BaseSegment]
 
     log_file_name: str
     log_lexicon_words: bool
@@ -143,10 +146,14 @@ class OtmlConfiguration(Model, Singleton):
     @classmethod
     def load(cls, config_folder_path: str) -> None:
         absolute_folder_path = os.path.join(os.getcwd(), config_folder_path)
-
         config_dict = {"config_folder": absolute_folder_path}
+
         for field_name, file_name in DATA_FILES.items():
             config_dict[field_name] = os.path.join(absolute_folder_path, file_name)
+
+        segment_file_path = config_folder_path.replace("/", ".") + ".segment"
+        segment_module = importlib.import_module(segment_file_path)
+        config_dict["Segment"] = segment_module.Segment
 
         with open(config_dict["config_file"], "r") as f:
             config_dict.update(json.load(f))

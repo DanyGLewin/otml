@@ -7,7 +7,7 @@ from ast import literal_eval
 from math import log, ceil
 from random import choice, randint
 
-from src.grammar.feature_table import Segment, NULL_SEGMENT, JOKER_SEGMENT
+from src.grammar.feature_table import NULL_SEGMENT, JOKER_SEGMENT, Segment_
 from src.models.transducer import CostVector, Arc, State, Transducer
 from src.otml_configuration import settings
 from src.utils.randomization_tools import get_weighted_list
@@ -28,7 +28,7 @@ class Word(UnicodeMixin, object):
         """
         self.word_string = word_string
         self.feature_table = feature_table
-        self.segments = [Segment(char, self.feature_table) for char in self.word_string]
+        self.segments = [Segment_(char, self.feature_table) for char in self.word_string]
 
     def change_segment(self):
         """changing the word_string and therefore the segments composing it
@@ -87,7 +87,7 @@ class Word(UnicodeMixin, object):
 
     def _set_word_string(self, new_word_string):
         self.word_string = new_word_string
-        self.segments = [Segment(char, self.feature_table) for char in self.word_string]
+        self.segments = [Segment_(char, self.feature_table) for char in self.word_string]
 
     def get_transducer(self):
         word_key = str(self)

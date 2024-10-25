@@ -31,7 +31,7 @@ def main(config_folder_path):
     OtmlConfiguration.load(config_folder_path)
 
     # load grammar and data
-    feature_table = FeatureTable.load(settings.features_file)
+    feature_table = FeatureTable.load()
     corpus = Corpus.load(settings.corpus_file)
     constraint_set = ConstraintSet.load(settings.constraints_file, feature_table)
     lexicon = Lexicon(corpus.get_words(), feature_table)
