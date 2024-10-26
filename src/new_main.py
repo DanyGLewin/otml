@@ -6,7 +6,7 @@ from grammar.feature_table import FeatureTable
 from grammar.grammar import Grammar
 from grammar.lexicon import Lexicon
 from simulated_annealing import SimulatedAnnealing
-from source.otml_configuration import OtmlConfiguration, settings
+from src.otml_configuration import OtmlConfiguration, settings
 from traversable_grammar_hypothesis import TraversableGrammarHypothesis
 
 CURRENT_PATH = os.path.split(os.path.abspath(__file__))[0]

@@ -3,7 +3,7 @@ import json
 from six import with_metaclass, PY3
 
 from singelton import Singleton
-from source.errors import ConfigurationManagerError
+from src.errors import ConfigurationManagerError
 
 if PY3:
     UNICODE_TYPE = str

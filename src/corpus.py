@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import textwrap
 
 from grammar.lexicon import Word, get_words_from_file
-from source.otml_configuration import settings
+from src.otml_configuration import settings
 from unicode_mixin import UnicodeMixin
 
 

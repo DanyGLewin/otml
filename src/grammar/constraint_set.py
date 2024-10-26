@@ -13,12 +13,12 @@ from six import StringIO, PY3
 from unicode_mixin import UnicodeMixin
 from random import choice, randrange
 from grammar.constraint import Constraint, get_number_of_constraints
-from source.errors import GrammarParseError, OtmlConfigurationError
+from src.errors import GrammarParseError, OtmlConfigurationError
 from transducer import Transducer
 from randomization_tools import get_weighted_list
 from grammar.constraint import MaxConstraint, DepConstraint, PhonotacticConstraint, IdentConstraint
 
-from source.otml_configuration import OtmlConfiguration, settings
+from src.otml_configuration import OtmlConfiguration, settings
 
 logger = logging.getLogger(__name__)
 

@@ -10,7 +10,7 @@ from six import PY3, StringIO, itervalues
 
 import logging
 from grammar.feature_table import NULL_SEGMENT, JOKER_SEGMENT, Segment
-from source.errors import CostVectorOperationError
+from src.errors import CostVectorOperationError
 from unicode_mixin import UnicodeMixin
 
 logger = logging.getLogger(__name__)
@@ -293,7 +293,7 @@ class Transducer(UnicodeMixin, object):
         print("size=\"11,5\"", file=str_io, end="\n")
         print("node [shape = ellipse];", file=str_io, end="\n")
 
-        print("// arcs: source -> dest [label]", file=str_io, end="\n")
+        print("// arcs: src -> dest [label]", file=str_io, end="\n")
         print(self._arcs_dot_representation(), file=str_io, end="")
 
         print("// start nodes", file=str_io, end="\n")

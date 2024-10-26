@@ -5,8 +5,8 @@ from typing import Any, Self
 
 from pydantic import BaseModel, field_validator, model_validator, ConfigDict, NonNegativeInt
 
-from source.errors import OtmlConfigurationError
-from source.singelton import Singleton
+from src.errors import OtmlConfigurationError
+from src.singelton import Singleton
 
 CONFIG_FILE_NAME = "config.json"
 
@@ -16,6 +16,7 @@ DATA_FILES = {
     "features_file": "features.json",
     "corpus_file": "corpus.txt",
 }
+LOGS_FOLDER = "out"
 
 
 class Model(BaseModel):
@@ -89,6 +90,8 @@ class OtmlConfiguration(Model, Singleton):
     features_file: str
     corpus_file: str
 
+    logs_folder: str
+
     log_file_name: str
     log_lexicon_words: bool
 
@@ -142,11 +145,7 @@ class OtmlConfiguration(Model, Singleton):
 
     @classmethod
     def load(cls, config_folder_path: str) -> None:
-        absolute_folder_path = os.path.join(os.getcwd(), config_folder_path)
-
-        config_dict = {"config_folder": absolute_folder_path}
-        for field_name, file_name in DATA_FILES.items():
-            config_dict[field_name] = os.path.join(absolute_folder_path, file_name)
+        config_dict = cls._build_file_paths(config_folder_path)
 
         with open(config_dict["config_file"], "r") as f:
             config_dict.update(json.load(f))
@@ -154,6 +153,19 @@ class OtmlConfiguration(Model, Singleton):
         config = cls.model_validate(config_dict)
         global _settings
         _settings = config
+
+    @staticmethod
+    def _build_file_paths(config_folder_path) -> dict[str, str]:
+        absolute_folder_path = os.path.join(os.getcwd(), config_folder_path)
+
+        file_paths = {
+            "config_folder": absolute_folder_path,
+            "logs_folder": os.path.join(absolute_folder_path, LOGS_FOLDER),
+        }
+        for field_name, file_name in DATA_FILES.items():
+            file_paths[field_name] = os.path.join(absolute_folder_path, file_name)
+
+        return file_paths
 
     def reset(self) -> Self:
         """
@@ -205,7 +217,7 @@ class OtmlConfiguration(Model, Singleton):
 
 
 # from here on: code to let us easily access configs in the project by doing
-# >>> from source.otml_configuration import settings
+# >>> from src.otml_configuration import settings
 # >>> settings.[any config field]
 # TODO: see if we can make this less ugly, or move it to a separate file
 

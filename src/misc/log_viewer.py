@@ -3,7 +3,7 @@ import platform
 import sys
 
 if platform.node() == "Iddos-MacBook-Pro.local":
-    LOG_FOLDER = "/Users/iddoberger/Documents/MercurialRepositories/otml/source/logging"
+    LOG_FOLDER = "/Users/iddoberger/Documents/MercurialRepositories/otml/src/logging"
 else:
     LOG_FOLDER = "/home/idoberg1/loggingotml"
 

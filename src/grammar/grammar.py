@@ -11,7 +11,7 @@ from unicode_mixin import UnicodeMixin
 from randomization_tools import get_weighted_list
 from debug_tools import write_to_dot
 
-from source.otml_configuration import settings
+from src.otml_configuration import settings
 
 logger = logging.getLogger(__name__)
 

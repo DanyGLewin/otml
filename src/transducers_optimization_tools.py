@@ -8,7 +8,7 @@ from functools import reduce
 
 import logging
 from grammar.lexicon import Word
-from source.errors import TransducerOptimizationError
+from src.errors import TransducerOptimizationError
 from transducer import Transducer, CostVector, Arc
 
 logger = logging.getLogger(__name__)

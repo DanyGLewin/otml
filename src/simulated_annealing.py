@@ -16,7 +16,7 @@ from grammar.constraint_set import ConstraintSet
 from grammar.grammar import Grammar
 from grammar.lexicon import Word
 from mail import MailManager
-from source.otml_configuration import settings
+from src.otml_configuration import settings
 
 logger = logging.getLogger(__name__)
 

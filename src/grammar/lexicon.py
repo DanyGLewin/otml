@@ -7,12 +7,12 @@ from math import log, ceil
 import codecs
 from ast import literal_eval
 
-from source.otml_configuration import settings
-from source.unicode_mixin import UnicodeMixin
+from src.otml_configuration import settings
+from src.unicode_mixin import UnicodeMixin
 
-from source.grammar.feature_table import Segment
-from source.transducer import CostVector, Arc, State, Transducer, NULL_SEGMENT, JOKER_SEGMENT
-from source.randomization_tools import get_weighted_list
+from src.grammar.feature_table import Segment
+from src.transducer import CostVector, Arc, State, Transducer, NULL_SEGMENT, JOKER_SEGMENT
+from src.randomization_tools import get_weighted_list
 
 logger = logging.getLogger(__name__)
 

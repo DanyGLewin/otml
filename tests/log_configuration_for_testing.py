@@ -6,8 +6,8 @@ import os
 use_file_handler = True
 use_terminal_handler = False
 
-if not os.path.exists("../logging/"):
-    os.makedirs("../logging/")
+if not os.path.exists("../src/logging/"):
+    os.makedirs("../src/logging/")
 
 unit_tests_log_file_name = "../logging/unit_tests_log.txt"
 

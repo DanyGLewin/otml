@@ -1,8 +1,8 @@
 import os
 import unittest
 
-from source.errors import OtmlConfigurationError
-from source.otml_configuration import OtmlConfiguration, ConstraintInsertionWeights
+from src.errors import OtmlConfigurationError
+from src.otml_configuration import OtmlConfiguration, ConstraintInsertionWeights
 
 
 class TestOtmlConfigurationManager(unittest.TestCase):

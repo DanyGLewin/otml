@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import os
 import codecs
 
-from source.otml_configuration import OtmlConfiguration, settings
+from src.otml_configuration import OtmlConfiguration, settings
 
 dirname, filename = os.path.split(os.path.abspath(__file__))
 

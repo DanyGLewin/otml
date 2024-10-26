@@ -11,7 +11,7 @@ import click
 from base64 import urlsafe_b64encode
 from uuid import uuid4
 
-from source.otml_configuration import OtmlConfiguration, settings
+from src.otml_configuration import OtmlConfiguration, settings
 
 from grammar.lexicon import Lexicon
 from grammar.feature_table import FeatureTable

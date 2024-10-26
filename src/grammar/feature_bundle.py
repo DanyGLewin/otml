@@ -7,10 +7,10 @@ from six import iterkeys
 from random import choice
 
 from unicode_mixin import UnicodeMixin
-from source.errors import GrammarParseError
-from source.errors import OtmlConfigurationError
+from src.errors import GrammarParseError
+from src.errors import OtmlConfigurationError
 
-from source.otml_configuration import settings
+from src.otml_configuration import settings
 
 logger = logging.getLogger(__name__)
 

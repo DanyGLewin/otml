@@ -5,7 +5,7 @@ import pickle
 from math import ceil, log
 
 import logging
-from source.otml_configuration import settings
+from src.otml_configuration import settings
 from unicode_mixin import UnicodeMixin
 
 logger = logging.getLogger(__name__)

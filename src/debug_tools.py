@@ -2,13 +2,12 @@ import os
 import time
 from collections import defaultdict
 
-dirname, filename = os.path.split(os.path.abspath(__file__))
-dot_files_folder_path = os.path.join(dirname, "logging/dot_files")
+from src.otml_configuration import settings
 
 
 def write_to_dot(transducer, file_name):
-    os.makedirs(dot_files_folder_path, exist_ok=True)  # make sure the directory exists
-    path = os.path.join(dot_files_folder_path, file_name + ".dot")
+    os.makedirs(settings.logs_folder, exist_ok=True)  # make sure the directory exists
+    path = os.path.join(settings.logs_folder, file_name + ".dot")
     open(path, "w").write(transducer.dot_representation())
 
 

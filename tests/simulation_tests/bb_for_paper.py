@@ -101,7 +101,7 @@ class TestOtmlWithBBForPaper(unittest.TestCase):
         number_of_steps_performed, hypothesis = self.simulated_annealing.run()
 
 
-# activate on server from otml/source/tests/simulation_tests
+# activate on server from otml/src/tests/simulation_tests
 if __name__ == '__main__':
     simulation_number = sys.argv[1]
     sys.argv = sys.argv[:1]  # leave only sys.argv[0] as sys.argv

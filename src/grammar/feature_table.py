@@ -13,10 +13,10 @@ from pydantic import BaseModel, model_validator
 from pydantic.v1 import create_model
 from six import string_types, integer_types, StringIO, iterkeys
 
-from source.otml_configuration import OtmlConfiguration
-from source.unicode_mixin import UnicodeMixin
-from source.errors import OtmlConfigurationError
-from source.errors import FeatureParseError
+from src.otml_configuration import OtmlConfiguration
+from src.unicode_mixin import UnicodeMixin
+from src.errors import OtmlConfigurationError
+from src.errors import FeatureParseError
 
 logger = logging.getLogger(__name__)
 

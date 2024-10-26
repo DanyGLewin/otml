@@ -9,13 +9,13 @@ from six import StringIO, with_metaclass
 
 from unicode_mixin import UnicodeMixin
 from grammar.feature_bundle import FeatureBundle
-from source.errors import GrammarParseError
+from src.errors import GrammarParseError
 from transducer import CostVector, Arc, State, Transducer
 from grammar.feature_table import JOKER_SEGMENT, NULL_SEGMENT
 from itertools import permutations
 
-from source.errors import ConstraintError
-from source.otml_configuration import settings
+from src.errors import ConstraintError
+from src.otml_configuration import settings
 
 logger = logging.getLogger(__name__)
 
