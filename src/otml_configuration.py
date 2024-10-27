@@ -5,8 +5,8 @@ from typing import Any, Self
 
 from pydantic import BaseModel, field_validator, model_validator, ConfigDict, NonNegativeInt
 
-from src.errors import OtmlConfigurationError
-from src.singelton import Singleton
+from src.exceptions import OtmlConfigurationError
+from src.models.singelton import Singleton
 
 CONFIG_FILE_NAME = "config.json"
 

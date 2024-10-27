@@ -3,20 +3,16 @@
 
 import codecs
 import json
-from dataclasses import dataclass, make_dataclass
-from random import choice
 import logging
-from copy import deepcopy
 import os
+from copy import deepcopy
+from random import choice
 
 from pydantic import BaseModel, model_validator
-from pydantic.v1 import create_model
 from six import string_types, integer_types, StringIO, iterkeys
 
-from src.otml_configuration import OtmlConfiguration
-from src.unicode_mixin import UnicodeMixin
-from src.errors import OtmlConfigurationError
-from src.errors import FeatureParseError
+from src.exceptions import FeatureParseError
+from src.misc.unicode_mixin import UnicodeMixin
 
 logger = logging.getLogger(__name__)
 

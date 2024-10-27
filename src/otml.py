@@ -4,22 +4,19 @@ The working directory for activating this file should be "otml"
 """
 
 import platform
-import os
-
-import click
-
 from base64 import urlsafe_b64encode
 from uuid import uuid4
 
-from src.otml_configuration import OtmlConfiguration, settings
+import click
 
-from grammar.lexicon import Lexicon
-from grammar.feature_table import FeatureTable
-from grammar.constraint_set import ConstraintSet
-from grammar.grammar import Grammar
-from traversable_grammar_hypothesis import TraversableGrammarHypothesis
-from corpus import Corpus
-from simulated_annealing import SimulatedAnnealing
+from src.grammar.constraint_set import ConstraintSet
+from src.grammar.feature_table import FeatureTable
+from src.grammar.grammar import Grammar
+from src.grammar.lexicon import Lexicon
+from src.models.corpus import Corpus
+from src.models.traversable_grammar_hypothesis import TraversableGrammarHypothesis
+from src.otml_configuration import OtmlConfiguration, settings
+from src.simulated_annealing import SimulatedAnnealing
 
 
 # --configuration simulations/bb/bb_configuration.json

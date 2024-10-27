@@ -1,22 +1,17 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import unittest
-import os
 from copy import deepcopy
-import pickle
 
-from six import PY3
-
-import tests.log_configuration_for_testing
-from tests.otml_configuration_for_testing import configurations
-from tests.persistence_tools import get_pickle
 from transducers_optimization_tools import remove_suboptimal_paths, make_optimal_paths, \
     optimize_transducer_grammar_for_word
-from transducer import CostVector, Arc, State, Transducer
-from grammar.constraint import PhonotacticConstraint
-from grammar.feature_table import FeatureTable, Segment, NULL_SEGMENT
-from grammar.lexicon import Word
+
+from src.grammar.constraint import PhonotacticConstraint
+from src.grammar.feature_table import FeatureTable, Segment, NULL_SEGMENT
+from src.grammar.lexicon import Word
+from src.models.transducer import CostVector, Arc, State, Transducer
 from tests.persistence_tools import get_feature_table_fixture
+from tests.persistence_tools import get_pickle
 
 
 class TestingTransducerOptimizationTools(unittest.TestCase):

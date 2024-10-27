@@ -3,21 +3,15 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import unittest
 
-import os
-
+from src.grammar.constraint_set import ConstraintSet
+from src.grammar.feature_table import FeatureTable
+from src.grammar.grammar import Grammar
+from src.grammar.lexicon import Lexicon
+from src.models.corpus import Corpus
+from src.models.traversable_grammar_hypothesis import TraversableGrammarHypothesis
 from tests.otml_configuration_for_testing import configurations
-from grammar.lexicon import Word, Lexicon
-from grammar.feature_table import FeatureTable
-from grammar.constraint_set import ConstraintSet
-from grammar.grammar import Grammar
-from traversable_grammar_hypothesis import TraversableGrammarHypothesis
 from tests.persistence_tools import get_constraint_set_fixture, get_feature_table_fixture, get_corpus_fixture, \
-    write_to_dot_to_file, clear_modules_caching, get_feature_table_by_fixture, get_corpus_by_fixture
-from corpus import Corpus
-from debug_tools import timeit
-import pprint
-
-from itertools import permutations
+    clear_modules_caching, get_feature_table_by_fixture, get_corpus_by_fixture
 
 
 class TestTraversableGrammarHypothesis(unittest.TestCase):

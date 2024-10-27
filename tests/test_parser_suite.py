@@ -3,14 +3,14 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import os
 import unittest
 
-from corpus import Corpus
-from grammar.constraint_set import ConstraintSet
-from grammar.feature_table import FeatureTable
-from grammar.grammar import Grammar
-from grammar.lexicon import Lexicon
-from grammar.lexicon import Word
+from src.grammar.constraint_set import ConstraintSet
+from src.grammar.feature_table import FeatureTable
+from src.grammar.grammar import Grammar
+from src.grammar.lexicon import Lexicon
+from src.grammar.lexicon import Word
+from src.models.corpus import Corpus
+from src.models.traversable_grammar_hypothesis import TraversableGrammarHypothesis
 from tests.persistence_tools import get_constraint_set_fixture, get_feature_table_fixture, get_corpus_fixture
-from traversable_grammar_hypothesis import TraversableGrammarHypothesis
 
 dirname, filename = os.path.split(os.path.abspath(__file__))
 

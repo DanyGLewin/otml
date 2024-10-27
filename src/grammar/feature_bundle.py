@@ -2,14 +2,13 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
-
-from six import iterkeys
 from random import choice
 
-from unicode_mixin import UnicodeMixin
-from src.errors import GrammarParseError
-from src.errors import OtmlConfigurationError
+from six import iterkeys
 
+from src.exceptions import GrammarParseError
+from src.exceptions import OtmlConfigurationError
+from src.misc.unicode_mixin import UnicodeMixin
 from src.otml_configuration import settings
 
 logger = logging.getLogger(__name__)

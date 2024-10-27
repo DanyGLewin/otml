@@ -1,18 +1,17 @@
 # Python2 and Python 3 compatibility:
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from random import choice, randint
-import logging
-from math import log, ceil
 import codecs
+import logging
 from ast import literal_eval
-
-from src.otml_configuration import settings
-from src.unicode_mixin import UnicodeMixin
+from math import log, ceil
+from random import choice, randint
 
 from src.grammar.feature_table import Segment
-from src.transducer import CostVector, Arc, State, Transducer, NULL_SEGMENT, JOKER_SEGMENT
-from src.randomization_tools import get_weighted_list
+from src.misc.randomization_tools import choose_by_weight
+from src.misc.unicode_mixin import UnicodeMixin
+from src.models.transducer import CostVector, Arc, State, Transducer, NULL_SEGMENT, JOKER_SEGMENT
+from src.otml_configuration import settings
 
 logger = logging.getLogger(__name__)
 
@@ -157,12 +156,13 @@ class Lexicon(UnicodeMixin, object):
         """
         rtype: boolean - the mutation success
         """
-        mutation_weights = [(self._insert_segment, settings.lexicon_mutation_weights.insert_segment),
-                            (self._delete_segment, settings.lexicon_mutation_weights.delete_segment),
-                            (self._change_segment, settings.lexicon_mutation_weights.change_segment)]
+        mutation_weights = [
+            (self._insert_segment, settings.lexicon_mutation_weights.insert_segment),
+            (self._delete_segment, settings.lexicon_mutation_weights.delete_segment),
+            (self._change_segment, settings.lexicon_mutation_weights.change_segment)
+        ]
 
-        weighted_mutation_function_list = get_weighted_list(mutation_weights)
-        return choice(weighted_mutation_function_list)()
+        return choose_by_weight(mutation_weights)()
 
     def _change_segment(self):
         return choice(self.words).change_segment()

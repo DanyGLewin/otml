@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from grammar.constraint_set import ConstraintSet
-from grammar.feature_table import FeatureTable
+from src.grammar.constraint_set import ConstraintSet
+from src.grammar.feature_table import FeatureTable
 from tests.persistence_tools import get_constraint_set_fixture, get_feature_table_fixture
 from tests.stochastic_testcase import StochasticTestCase
 

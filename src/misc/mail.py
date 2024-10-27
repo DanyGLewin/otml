@@ -1,7 +1,7 @@
-from singelton import Singleton
-from six import with_metaclass
 import logging
 import smtplib
+
+from src.models.singelton import Singleton
 
 logger = logging.getLogger(__name__)
 

@@ -1,6 +1,6 @@
 import unittest
 
-from mail import MailManager
+from src.misc.mail import MailManager
 
 
 class TestMailManager(unittest.TestCase):

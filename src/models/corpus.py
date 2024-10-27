@@ -3,9 +3,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import textwrap
 
-from grammar.lexicon import Word, get_words_from_file
+from src.grammar.lexicon import Word, get_words_from_file
+from src.misc.unicode_mixin import UnicodeMixin
 from src.otml_configuration import settings
-from unicode_mixin import UnicodeMixin
 
 
 class Corpus(UnicodeMixin, object):

@@ -3,15 +3,15 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import functools
 import itertools
+import logging
 from collections import defaultdict
 from copy import deepcopy
 
 from six import PY3, StringIO, itervalues
 
-import logging
-from grammar.feature_table import NULL_SEGMENT, JOKER_SEGMENT, Segment
-from src.errors import CostVectorOperationError
-from unicode_mixin import UnicodeMixin
+from src.exceptions import CostVectorOperationError
+from src.grammar.feature_table import NULL_SEGMENT, JOKER_SEGMENT, Segment
+from src.misc.unicode_mixin import UnicodeMixin
 
 logger = logging.getLogger(__name__)
 

@@ -3,14 +3,14 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import pickle
 import unittest
 
-from corpus import Corpus
-from debug_tools import timeit
-from grammar.constraint import MaxConstraint, PhonotacticConstraint
-from grammar.constraint_set import ConstraintSet
-from grammar.feature_table import FeatureTable
-from grammar.grammar import Grammar
-from grammar.lexicon import Lexicon
-from grammar.lexicon import Word
+from src.grammar.constraint import MaxConstraint, PhonotacticConstraint
+from src.grammar.constraint_set import ConstraintSet
+from src.grammar.feature_table import FeatureTable
+from src.grammar.grammar import Grammar
+from src.grammar.lexicon import Lexicon
+from src.grammar.lexicon import Word
+from src.misc.debug_tools import timeit
+from src.models.corpus import Corpus
 from tests.otml_configuration_for_testing import configurations
 from tests.persistence_tools import get_constraint_set_fixture, get_feature_table_fixture, get_corpus_fixture
 
@@ -59,7 +59,7 @@ class TestObjectCaching(unittest.TestCase):
     def test_generate_caching(self):
         word = Word("bbb", self.feature_table)
         word_outputs = self.grammar.generate(word)
-        from grammar.grammar import outputs_by_constraint_set_and_word
+        from src.grammar.grammar import outputs_by_constraint_set_and_word
 
         constraint_set_and_word_key = str(self.grammar.constraint_set) + str(word)
 

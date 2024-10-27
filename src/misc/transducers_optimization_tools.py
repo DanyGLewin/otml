@@ -2,14 +2,14 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import itertools
+import logging
 import pickle
 import random
 from functools import reduce
 
-import logging
-from grammar.lexicon import Word
-from src.errors import TransducerOptimizationError
-from transducer import Transducer, CostVector, Arc
+from src.exceptions import TransducerOptimizationError
+from src.grammar.lexicon import Word
+from src.models.transducer import Transducer, CostVector, Arc
 
 logger = logging.getLogger(__name__)
 

@@ -31,7 +31,7 @@ def get_time_string(time):
     if time > 1:
         time_string = "{0:.1f} seconds".format(time)
         if time > 60:
-            from simulated_annealing import _pretty_runtime_str
+            from src.simulated_annealing import _pretty_runtime_str
             time_string = _pretty_runtime_str(time)
     else:
         time *= 1000

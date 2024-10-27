@@ -1,7 +1,7 @@
 import logging
-from sys import stdout
-from os.path import split, join, normpath, abspath
 import os
+from os.path import split, join, normpath, abspath
+from sys import stdout
 
 use_file_handler = True
 use_terminal_handler = False

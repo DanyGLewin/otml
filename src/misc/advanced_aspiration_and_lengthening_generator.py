@@ -2,7 +2,7 @@ import re
 from collections import namedtuple
 from random import choice, shuffle
 
-from misc.corpus_generator import CorpusGenerator
+from src.misc.corpus_generator import CorpusGenerator
 
 SyllablesTypeBase = namedtuple('SyllableType',
                                ['aspiration_and_lengthening', 'aspiration_only', 'lengthening_only', 'nothing'])

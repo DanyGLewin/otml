@@ -1,8 +1,8 @@
 # Python2 and Python 3 compatibility:
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from grammar.feature_bundle import FeatureBundle
-from grammar.feature_table import FeatureTable, FeatureParseError, Segment, FeatureType
+from src.grammar.feature_bundle import FeatureBundle
+from src.grammar.feature_table import FeatureTable, FeatureParseError, Segment, FeatureType
 from tests.persistence_tools import get_feature_table_fixture, get_feature_table_by_fixture
 from tests.stochastic_testcase import StochasticTestCase
 

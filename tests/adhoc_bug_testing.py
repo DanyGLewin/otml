@@ -1,22 +1,15 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import unittest
-from copy import deepcopy
-
-from tests.otml_configuration_for_testing import configurations
-from grammar.feature_table import FeatureTable
-from grammar.lexicon import Word
-from grammar.lexicon import Lexicon
-from corpus import Corpus
-from grammar.constraint import MaxConstraint, DepConstraint, IdentConstraint, PhonotacticConstraint, FaithConstraint
-from grammar.constraint_set import ConstraintSet
-from grammar.grammar import Grammar
-from transducer import Transducer
-from transducers_optimization_tools import make_optimal_paths
-from tests.persistence_tools import get_feature_table_fixture, get_corpus_fixture, get_constraint_set_fixture, \
-    get_feature_table_by_fixture
-from traversable_grammar_hypothesis import TraversableGrammarHypothesis
 import cProfile
+import unittest
+
+from src.grammar.constraint_set import ConstraintSet
+from src.grammar.feature_table import FeatureTable
+from src.grammar.grammar import Grammar
+from src.grammar.lexicon import Lexicon
+from src.models.corpus import Corpus
+from tests.otml_configuration_for_testing import configurations
+from tests.persistence_tools import get_feature_table_fixture, get_corpus_fixture, get_feature_table_by_fixture
 
 faith_8 = "Max[+voice] >> Phonotactic[[-syll][+long]] >> Dep[+syll] >> Max[+stop] >> Phonotactic[[-long][+voice]] >> Phonotactic[[+stop][+syll]] >> Dep[-syll] >> Max[+syll] >> Phonotactic[[-voice][-low]] >> Faith[]"
 

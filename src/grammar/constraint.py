@@ -1,20 +1,19 @@
 # Python2 and Python 3 compatibility:
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import sys
-from random import randint, choice
 import logging
+import sys
+from itertools import permutations
+from random import randint, choice
 
 from six import StringIO, with_metaclass
 
-from unicode_mixin import UnicodeMixin
-from grammar.feature_bundle import FeatureBundle
-from src.errors import GrammarParseError
-from transducer import CostVector, Arc, State, Transducer
-from grammar.feature_table import JOKER_SEGMENT, NULL_SEGMENT
-from itertools import permutations
-
-from src.errors import ConstraintError
+from src.exceptions import ConstraintError
+from src.exceptions import GrammarParseError
+from src.grammar.feature_bundle import FeatureBundle
+from src.grammar.feature_table import JOKER_SEGMENT, NULL_SEGMENT
+from src.misc.unicode_mixin import UnicodeMixin
+from src.models.transducer import CostVector, Arc, State, Transducer
 from src.otml_configuration import settings
 
 logger = logging.getLogger(__name__)

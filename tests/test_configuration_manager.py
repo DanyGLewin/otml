@@ -5,7 +5,7 @@ import codecs
 import os
 import unittest
 
-from configuration_manager import ConfigurationManager, ConfigurationManagerError
+from src.models.configuration_manager import ConfigurationManager, ConfigurationManagerError
 
 
 class TestConfigurationManager(unittest.TestCase):

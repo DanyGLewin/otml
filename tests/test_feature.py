@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from grammar.feature_bundle import FeatureBundle
-from grammar.feature_table import FeatureTable
+from src.grammar.feature_bundle import FeatureBundle
+from src.grammar.feature_table import FeatureTable
 from tests.otml_configuration_for_testing import configurations
 from tests.persistence_tools import get_feature_table_fixture
 from tests.stochastic_testcase import StochasticTestCase

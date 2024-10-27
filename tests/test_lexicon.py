@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from copy import deepcopy
 
-from grammar.lexicon import Word, Lexicon
+from src.grammar.lexicon import Word, Lexicon
 from tests.persistence_tools import get_feature_table_by_fixture
 from tests.stochastic_testcase import StochasticTestCase
 

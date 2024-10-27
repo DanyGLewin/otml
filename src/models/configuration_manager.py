@@ -2,8 +2,8 @@ import json
 
 from six import with_metaclass, PY3
 
-from singelton import Singleton
-from src.errors import ConfigurationManagerError
+from src.exceptions import ConfigurationManagerError
+from src.models.singelton import Singleton
 
 if PY3:
     UNICODE_TYPE = str

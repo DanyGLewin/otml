@@ -1,6 +1,6 @@
 from random import choice
 
-from misc.corpus_generator import CorpusGenerator
+from src.misc.corpus_generator import CorpusGenerator
 
 
 def main():

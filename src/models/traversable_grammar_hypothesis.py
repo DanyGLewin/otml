@@ -1,12 +1,12 @@
 # Python2 and Python 3 compatibility:
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import logging
 import pickle
 from math import ceil, log
 
-import logging
+from src.misc.unicode_mixin import UnicodeMixin
 from src.otml_configuration import settings
-from unicode_mixin import UnicodeMixin
 
 logger = logging.getLogger(__name__)
 

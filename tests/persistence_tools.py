@@ -4,9 +4,10 @@ import pickle
 from os import listdir, remove
 from os.path import split, abspath, join
 
-from corpus import Corpus
-from grammar.feature_table import FeatureTable
 from six import PY3, StringIO
+
+from src.grammar.feature_table import FeatureTable
+from src.models.corpus import Corpus
 
 tests_dir_path, filename = split(abspath(__file__))
 

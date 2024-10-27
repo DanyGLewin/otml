@@ -2,19 +2,18 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import unittest
 
+from src.grammar.constraint import HeadDepConstraint, MainLeftConstraint, PrecedeConstraint, ContiguityConstraint
+from src.grammar.constraint import MaxConstraint, DepConstraint, IdentConstraint, PhonotacticConstraint, FaithConstraint
+from src.grammar.constraint_set import ConstraintSet
+from src.grammar.feature_table import FeatureTable
+from src.grammar.grammar import Grammar
+from src.grammar.lexicon import Lexicon
+from src.grammar.lexicon import Word
+from src.models.corpus import Corpus
 from tests.otml_configuration_for_testing import configurations
-from grammar.feature_table import FeatureTable
-from grammar.lexicon import Word
-from grammar.lexicon import Lexicon
-from corpus import Corpus
-from grammar.constraint import MaxConstraint, DepConstraint, IdentConstraint, PhonotacticConstraint, FaithConstraint
-from grammar.constraint import HeadDepConstraint, MainLeftConstraint, PrecedeConstraint, ContiguityConstraint
-from grammar.constraint_set import ConstraintSet
-from tests.persistence_tools import get_pickle
-from grammar.grammar import Grammar
 from tests.persistence_tools import get_constraint_set_fixture, get_feature_table_fixture, get_corpus_fixture, \
-    write_to_dot_to_file, clear_dot_folder
-from traversable_grammar_hypothesis import TraversableGrammarHypothesis
+    write_to_dot_to_file
+from tests.persistence_tools import get_pickle
 
 
 class TestTransducerRepresentations(unittest.TestCase):

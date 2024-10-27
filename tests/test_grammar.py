@@ -1,10 +1,10 @@
 # Python2 and Python 3 compatibility:
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from grammar.constraint_set import ConstraintSet
-from grammar.feature_table import FeatureTable
-from grammar.grammar import Grammar
-from grammar.lexicon import Lexicon
+from src.grammar.constraint_set import ConstraintSet
+from src.grammar.feature_table import FeatureTable
+from src.grammar.grammar import Grammar
+from src.grammar.lexicon import Lexicon
 from tests.persistence_tools import get_constraint_set_fixture, get_feature_table_fixture
 from tests.stochastic_testcase import StochasticTestCase
 

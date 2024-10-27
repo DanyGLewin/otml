@@ -3,14 +3,12 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import logging
 
-from random import choice
-from grammar.lexicon import Word
-from transducer import Transducer
-from transducers_optimization_tools import optimize_transducer_grammar_for_word, make_optimal_paths
-from unicode_mixin import UnicodeMixin
-from randomization_tools import get_weighted_list
-from debug_tools import write_to_dot
-
+from src.grammar.lexicon import Word
+from src.misc.debug_tools import write_to_dot
+from src.misc.randomization_tools import choose_by_weight
+from src.misc.transducers_optimization_tools import optimize_transducer_grammar_for_word, make_optimal_paths
+from src.misc.unicode_mixin import UnicodeMixin
+from src.models.transducer import Transducer
 from src.otml_configuration import settings
 
 logger = logging.getLogger(__name__)
@@ -32,11 +30,12 @@ class Grammar(UnicodeMixin, object):
         return self.constraint_set.get_encoding_length() + self.lexicon.get_encoding_length()
 
     def make_mutation(self):
-        mutation_weights = [(self.lexicon, settings.lexicon_mutation_weights.sum),
-                            (self.constraint_set, settings.constraint_set_mutation_weights.sum), ]
+        mutation_weights = [
+            (self.lexicon, settings.lexicon_mutation_weights.sum),
+            (self.constraint_set, settings.constraint_set_mutation_weights.sum)
+        ]
 
-        weighted_mutatable_object_list = get_weighted_list(mutation_weights)
-        object_to_mutate = choice(weighted_mutatable_object_list)
+        object_to_mutate = choose_by_weight(mutation_weights)
         mutation_result = object_to_mutate.make_mutation()
         return mutation_result
 

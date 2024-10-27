@@ -3,10 +3,11 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import unittest
 from copy import deepcopy
 
-from grammar.constraint import PhonotacticConstraint, MaxConstraint, DepConstraint, FaithConstraint
-from grammar.feature_table import FeatureTable, Segment
+from src.grammar.constraint import PhonotacticConstraint, MaxConstraint, DepConstraint, FaithConstraint
+from src.grammar.feature_table import FeatureTable, Segment
+from src.models.transducer import CostVector, Arc, State, Transducer, JOKER_SEGMENT, NULL_SEGMENT, \
+    CostVectorOperationError
 from tests.persistence_tools import get_pickle, get_feature_table_fixture
-from transducer import CostVector, Arc, State, Transducer, JOKER_SEGMENT, NULL_SEGMENT, CostVectorOperationError
 
 
 class TestTransducer(unittest.TestCase):

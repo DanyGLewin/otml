@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from src.errors import OtmlConfigurationError
+from src.exceptions import OtmlConfigurationError
 from src.otml_configuration import OtmlConfiguration, ConstraintInsertionWeights
 
 

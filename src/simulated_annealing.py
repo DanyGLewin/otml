@@ -1,6 +1,7 @@
 # Python2 and Python 3 compatibility:
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import logging
 import os
 import random
 import re
@@ -10,12 +11,11 @@ from datetime import timedelta
 from math import exp
 from random import choice
 
-import logging
-from grammar.constraint import Constraint
-from grammar.constraint_set import ConstraintSet
-from grammar.grammar import Grammar
-from grammar.lexicon import Word
-from mail import MailManager
+from src.grammar.constraint import Constraint
+from src.grammar.constraint_set import ConstraintSet
+from src.grammar.grammar import Grammar
+from src.grammar.lexicon import Word
+from src.misc.mail import MailManager
 from src.otml_configuration import settings
 
 logger = logging.getLogger(__name__)
