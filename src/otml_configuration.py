@@ -1,4 +1,6 @@
+import datetime
 import json
+import logging
 import os
 from io import StringIO
 from typing import Any, Self
@@ -16,7 +18,8 @@ DATA_FILES = {
     "features_file": "features.json",
     "corpus_file": "corpus.txt",
 }
-LOGS_FOLDER = "out"
+OUTPUT_FOLDER = "out"
+LOGS_FILE = "log.txt"
 
 
 class Model(BaseModel):
@@ -90,9 +93,9 @@ class OtmlConfiguration(Model, Singleton):
     features_file: str
     corpus_file: str
 
-    logs_folder: str
+    output_folder: str
+    logs_file: str
 
-    log_file_name: str
     log_lexicon_words: bool
 
     corpus_duplication_factor: int
@@ -136,9 +139,6 @@ class OtmlConfiguration(Model, Singleton):
         try:
             if raw.casefold() == "inf":
                 return float("inf")
-            if "**" in raw:
-                x, y = raw.split("**")
-                return float(x) ** int(y)
         except ValueError:
             raise OtmlConfigurationError(f"Invalid config.json value", {"value": raw})
         return raw
@@ -157,13 +157,17 @@ class OtmlConfiguration(Model, Singleton):
     @staticmethod
     def _build_file_paths(config_folder_path) -> dict[str, str]:
         absolute_folder_path = os.path.join(os.getcwd(), config_folder_path)
+        output_folder = os.path.join(absolute_folder_path, OUTPUT_FOLDER)
 
         file_paths = {
             "config_folder": absolute_folder_path,
-            "logs_folder": os.path.join(absolute_folder_path, LOGS_FOLDER),
+            "output_folder": output_folder,
+            "logs_file": os.path.join(output_folder, LOGS_FILE),
         }
         for field_name, file_name in DATA_FILES.items():
             file_paths[field_name] = os.path.join(absolute_folder_path, file_name)
+
+        os.makedirs(output_folder, exist_ok=True)  # make sure the directory exists
 
         return file_paths
 
@@ -191,9 +195,9 @@ class OtmlConfiguration(Model, Singleton):
     @model_validator(mode="after")
     def _validate_not_implemented_features(self):
         for value in (
-                self.constraint_set_mutation_weights.augment_feature_bundle,
-                self.lexicon_mutation_weights.change_segment,
-                self.allow_candidates_with_changed_segments,
+            self.constraint_set_mutation_weights.augment_feature_bundle,
+            self.lexicon_mutation_weights.change_segment,
+            self.allow_candidates_with_changed_segments,
         ):
             if value:
                 raise NotImplementedError

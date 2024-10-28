@@ -306,3 +306,4 @@ pyrightconfig.json
 .python-version
 src/logging/dot_files/*
 *.dot
+*.log

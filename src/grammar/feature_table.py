@@ -21,7 +21,7 @@ class Feature(BaseModel):
     label: str
     values: list[str]
 
-    def __repr__(self):
+    def __str__(self):
         return f"{self.label}: {self.values}"
 
 

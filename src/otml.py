@@ -3,6 +3,7 @@ This is the entry point of the otml project
 The working directory for activating this file should be "otml"
 """
 
+import os
 import platform
 from base64 import urlsafe_b64encode
 from uuid import uuid4
@@ -13,22 +14,24 @@ from src.grammar.constraint_set import ConstraintSet
 from src.grammar.feature_table import FeatureTable
 from src.grammar.grammar import Grammar
 from src.grammar.lexicon import Lexicon
+from src.misc.logger import setup_logger
 from src.models.corpus import Corpus
 from src.models.traversable_grammar_hypothesis import TraversableGrammarHypothesis
 from src.otml_configuration import OtmlConfiguration, settings
 from src.simulated_annealing import SimulatedAnnealing
 
 
-# --configuration simulations/bb/bb_configuration.json
-
 
 @click.command()
 @click.option(
     "-c", "--configuration", "config_folder_path", required=True, help="Relative path to the configuration folder"
 )
-def main(config_folder_path):
+@click.option("-v", "--verbose", "verbose", is_flag=True, default=False, help="Set log level to info")
+@click.option("-vv", "--very-verbose", "very_verbose", is_flag=True, default=False, help="Set log level to debug")
+def main(config_folder_path, verbose, very_verbose):
     # load configurations
     OtmlConfiguration.load(config_folder_path)
+    setup_logger(verbose, very_verbose)
 
     # load grammar and data
     feature_table = FeatureTable.load(settings.features_file)
