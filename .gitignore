@@ -304,4 +304,6 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains,python,git
 
 .python-version
-source/logging/dot_files/*
+src/logging/dot_files/*
+*.dot
+*.log

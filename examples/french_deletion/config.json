@@ -1,0 +1,45 @@
+{
+  "simulation_name": "french deletion example simulation",
+  "log_lexicon_words": true,
+  "corpus_duplication_factor": 1,
+  "allow_candidates_with_changed_segments": false,
+  "restriction_on_alphabet": false,
+  "max_constraints_in_constraint_set": "INF",
+  "min_constraints_in_constraint_set": 1,
+  "max_feature_bundles_in_phonotactic_constraint": 2,
+  "min_feature_bundles_in_phonotactic_constraint": 1,
+  "max_features_in_bundle": "INF",
+  "initial_number_of_features": 1,
+  "initial_number_of_bundles_in_phonotactic_constraint": 1,
+  "random_position_for_feature_bundle_insertion_in_phonotactic": true,
+  "random_position_for_feature_bundle_removal_in_phonotactic": true,
+  "lexicon_mutation_weights": {
+    "insert_segment": 1,
+    "delete_segment": 1,
+    "change_segment": 0
+  },
+  "constraint_set_mutation_weights": {
+    "insert_constraint": 1,
+    "remove_constraint": 1,
+    "demote_constraint": 1,
+    "insert_feature_bundle_phonotactic_constraint": 1,
+    "remove_feature_bundle_phonotactic_constraint": 1,
+    "augment_feature_bundle": 0
+  },
+  "constraint_insertion_weights": {
+    "dep": 0,
+    "max": 1,
+    "ident": 0,
+    "phonotactic": 1
+  },
+  "initial_temp": 100,
+  "threshold": 0.01,
+  "cooling_factor": 0.999,
+  "debug_logging_interval": 50,
+  "clear_modules_caching_interval": 50,
+  "steps_limitation": "INF",
+  "random_seed": true,
+  "seed": 0,
+  "data_encoding_length_multiplier": 100,
+  "grammar_encoding_length_multiplier": 1
+}
